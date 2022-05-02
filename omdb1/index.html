@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #searchBox{
+           
+            width: 30%;
+            margin: auto;
+            margin-top: 100px;
+        }
+        #searchBox input{
+            padding: 10px;
+        }
+        #con{
+            width: 50%;
+            margin: auto;
+            /* border: 1px solid gray; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;        
+        }
+        #con >img {
+            width: 50%;
+            margin: auto;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="searchBox">
+        <input type="text" placeholder="search" id="name">
+        <input type="button" value="Search" id="btn">
+
+    </div>
+    <div id="con">
+
+    </div>
+</body>
+<script>
+    var apiKey = '79499d8d';
+    document.querySelector("#btn").addEventListener('click', ()=>{
+        document.querySelector('#con').innerHTML = "";
+
+        var name = document.querySelector('#name').value;
+        var url = `http://www.omdbapi.com/?apikey=${apiKey}&t=${name}`;
+        console.log(url)
+        fetch(url).then((res)=>{
+            return res.json();
+        }).then((res)=>{
+            // console.log(res);
+            if(res.Title == undefined){
+                var para = document.createElement('p');
+                para.innerText = "Not Found";
+                document.querySelector('#con').append(para);
+                return;
+            }
+            var title = document.createElement('p');
+            title.innerText = res.Title;
+            title.style.fontSize ="40px"
+            title.style.textAlign ="center"
+            var release = document.createElement('p');
+            release.innerText = `Release: ${res.Released}`
+            var country = document.createElement('p');
+            country.innerText = `Country: ${res.Country}`
+            var image = document.createElement('img');
+            image.src = res.Poster;
+            document.querySelector('#con').append(image, title, release, country);
+        }).catch((err)=>{
+            console.log(err)
+        })
+        event.preventDefault();     
+    })
+            
+         
+</script>
+</html>
